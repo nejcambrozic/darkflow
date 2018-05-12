@@ -48,7 +48,7 @@ def pascal_voc_clean_xml(ANN, pick, exclusive = False):
                 if name not in pick:
                         continue
 
-                xmlbox = obj.find('bndbox')
+                xmlbox = obj.find('bnbBox')
                 xn = int(float(xmlbox.find('xmin').text))
                 xx = int(float(xmlbox.find('xmax').text))
                 yn = int(float(xmlbox.find('ymin').text))

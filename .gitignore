@@ -1,6 +1,7 @@
 
 # Python bytecode
 *.pyc
+.idea/
 
 # Weight files
 bin/
@@ -44,3 +45,4 @@ ckpt/*
 
 #pytest cache
 .cache/
+darkflow/cython_utils/
