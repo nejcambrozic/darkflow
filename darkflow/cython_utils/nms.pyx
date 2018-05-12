@@ -1,10 +1,12 @@
-import numpy as np
+mport numpy as np
 cimport numpy as np
-cimport cython
-from libc.math cimport exp
 from ..utils.box import BoundBox
 
+cimport
+numpy as np
+import numpy as np
 
+from ..utils.box import BoundBox
 
 #OVERLAP
 @cython.boundscheck(False) # turn off bounds-checking for entire function

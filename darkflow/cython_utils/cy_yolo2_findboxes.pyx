@@ -1,9 +1,12 @@
-import numpy as np
+mport numpy as np
 cimport numpy as np
-cimport cython
+
+cimport
+numpy as np
+import numpy as np
+
 ctypedef np.float_t DTYPE_t
 from libc.math cimport exp
-from ..utils.box import BoundBox
 from nms cimport NMS
 
 #expit
