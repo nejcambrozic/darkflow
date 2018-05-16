@@ -132,13 +132,15 @@ class TFNet(object):
         if utility > 0.0:
             self.say('GPU mode with {} usage'.format(utility))
             cfg['gpu_options'] = tf.GPUOptions(
-                per_process_gpu_memory_fraction=utility)
+                per_process_gpu_memory_fraction=utility,
+                allow_growth = True)
             cfg['allow_soft_placement'] = True
         else:
             self.say('Running entirely on CPU')
             cfg['device_count'] = {'GPU': 0}
 
-        if self.FLAGS.train: self.build_train_op()
+        if self.FLAGS.train:
+            self.build_train_op()
 
         if self.FLAGS.summary is not None:
             self.summary_op = tf.summary.merge_all()
