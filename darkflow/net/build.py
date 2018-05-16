@@ -72,6 +72,7 @@ class TFNet(object):
         self.graph = tf.Graph()
         device_name = FLAGS.gpuName \
             if FLAGS.gpu > 0.0 else None
+        self.say('Running on %s' % str(device_name))
         with tf.device(device_name):
             with self.graph.as_default() as g:
                 self.build_forward()
