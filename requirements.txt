@@ -1,7 +1,6 @@
 appnope==0.1.0
 bleach==1.5.0
 Cython==0.27.1
--e git+git@github.com:thtrieu/darkflow.git@6dddf041fce98b71d3721b74e3363a7f8fc937df#egg=darkflow
 decorator==4.2.1
 html5lib==0.9999999
 ipdb==0.11
