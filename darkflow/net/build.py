@@ -132,11 +132,11 @@ class TFNet(object):
         utility = min(self.FLAGS.gpu, 1.)
         if utility > 0.0:
             self.say('GPU mode with {} usage'.format(utility))
+            # per_process_gpu_memory_fraction=utility,
             cfg['gpu_options'] = tf.GPUOptions(
-                #per_process_gpu_memory_fraction=utility,
-                allow_growth=True,
-                visible_device_list="0")
+                allow_growth=True)
             cfg['allow_soft_placement'] = True
+            #cfg['visible_device_list'] = "0"
         else:
             self.say('Running entirely on CPU')
             cfg['device_count'] = {'GPU': 0}
@@ -149,7 +149,10 @@ class TFNet(object):
             self.writer = tf.summary.FileWriter(self.FLAGS.summary + 'train')
 
         self.say(cfg)
-        self.sess = tf.Session(config=tf.ConfigProto(**cfg))
+        c = tf.ConfigProto(**cfg)
+        if utility > 0.0:
+            c.gpu_options.visible_device_list = "0"
+        self.sess = tf.Session(config=c)
         self.sess.run(tf.global_variables_initializer())
 
         if not self.ntrain: return
