@@ -45,8 +45,9 @@ class TFNet(object):
             newFLAGS.update(FLAGS)
             FLAGS = newFLAGS
 
-        self.say('TOP LEVEL device name %s' % str(FLAGS.gpu))
         self.FLAGS = FLAGS
+        self.say('TOP LEVEL device name %s' % str(self.FLAGS.gpu))
+
         if self.FLAGS.pbLoad and self.FLAGS.metaLoad:
             self.say('\nLoading from .pb and .meta')
             self.graph = tf.Graph()
