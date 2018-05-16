@@ -148,6 +148,7 @@ class TFNet(object):
             self.summary_op = tf.summary.merge_all()
             self.writer = tf.summary.FileWriter(self.FLAGS.summary + 'train')
 
+        self.say(cfg)
         self.sess = tf.Session(config=tf.ConfigProto(**cfg))
         self.sess.run(tf.global_variables_initializer())
 
