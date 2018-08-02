@@ -1,6 +1,6 @@
 import numpy as np
 import tensorflow as tf
-
+#tf.enable_eager_execution()
 
 def expit_tensor(x):
     return 1. / (1. + tf.exp(-x))
@@ -23,6 +23,8 @@ def loss(self, net_out):
     HW = H * W  # number of grid cells
     anchors = m['anchors']
 
+    print('m' , m)
+
     print('{} loss hyper-parameters:'.format(m['model']))
     print('\tH       = {}'.format(H))
     print('\tW       = {}'.format(W))
@@ -39,6 +41,7 @@ def loss(self, net_out):
     _coord = tf.placeholder(tf.float32, size2 + [4])
     # weights term for L2 loss
     _proid = tf.placeholder(tf.float32, size1)
+    #_horizon_mask = tf.placeholder(tf.float32, size2)
     # material calculating IOU
     _areas = tf.placeholder(tf.float32, size2)
     _upleft = tf.placeholder(tf.float32, size2 + [2])
@@ -46,7 +49,8 @@ def loss(self, net_out):
 
     self.placeholders = {
         'probs': _probs, 'confs': _confs, 'coord': _coord, 'proid': _proid,
-        'areas': _areas, 'upleft': _upleft, 'botright': _botright
+        'areas': _areas, 'upleft': _upleft, 'botright': _botright,
+        #'horizon_mask': _horizon_mask
     }
 
     # Extract the coordinate prediction from net.out
@@ -101,6 +105,8 @@ def loss(self, net_out):
     print('Building {} loss'.format(m['model']))
     loss = tf.pow(adjusted_net_out - true, 2)
     loss = tf.multiply(loss, wght)
+    #import ipdb; ipdb.set_trace()
+    #loss = tf.multiply(loss, _horizon_mask)
     loss = tf.reshape(loss, [-1, H * W * B * (4 + 1 + C)])
     loss = tf.reduce_sum(loss, 1)
     self.loss = .5 * tf.reduce_mean(loss)

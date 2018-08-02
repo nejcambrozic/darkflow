@@ -24,6 +24,14 @@ def _batch(self, chunk):
     path = os.path.join(self.FLAGS.dataset, jpg)
     img = self.preprocess(path, allobj)
 
+    # Horizon Hack for MODD
+    for obj in allobj:
+        if obj[0] == 'parking meter':  # mocked horizon
+            obj[1] = 1
+            obj[2] = 1
+            obj[3] = 1
+            obj[4] = 1
+
     # Calculate regression target
     cellx = 1. * w / W
     celly = 1. * h / H
@@ -43,6 +51,13 @@ def _batch(self, chunk):
 
     # show(im, allobj, S, w, h, cellx, celly) # unit test
 
+    horizon = ['horizon', 0, 0, 0, 0]
+    # Horizon Hack for MODD
+    for obj in allobj:
+        if obj[0] == 'parking meter':  # mocked horizon
+            horizon = obj
+            allobj.remove(horizon)
+
     # Calculate placeholders' values
     probs = np.zeros([H * W, B, C])
     confs = np.zeros([H * W, B])
@@ -58,12 +73,20 @@ def _batch(self, chunk):
         prear[obj[5], 1] = obj[2] - obj[4] ** 2 * .5 * H  # yup
         prear[obj[5], 2] = obj[1] + obj[3] ** 2 * .5 * W  # xright
         prear[obj[5], 3] = obj[2] + obj[4] ** 2 * .5 * H  # ybot
-        confs[obj[5], :] = [1.] * B
+        # determine if below horizon
+        ymax = obj[2]
+        #import ipdb;
+        #ipdb.set_trace()
+
+        if obj[4] > ymax:
+            ymax = obj[4]
+        if ymax > horizon[2] or ymax > horizon[4]:
+            confs[obj[5], :] = [1.] * B
 
     # Finalise the placeholders' values
     upleft = np.expand_dims(prear[:, 0:2], 1)
     botright = np.expand_dims(prear[:, 2:4], 1)
-    wh = botright - upleft;
+    wh = botright - upleft
     area = wh[:, :, 0] * wh[:, :, 1]
     upleft = np.concatenate([upleft] * B, 1)
     botright = np.concatenate([botright] * B, 1)
@@ -71,12 +94,14 @@ def _batch(self, chunk):
 
     # value for placeholder at input layer
     inp_feed_val = img
-    # value for placeholder at loss layer 
+    # value for placeholder at loss layer
+    #print(allobj)
     loss_feed_val = {
         'probs': probs, 'confs': confs,
         'coord': coord, 'proid': proid,
         'areas': areas, 'upleft': upleft,
-        'botright': botright
+        'botright': botright,
+        #'horizon_mask': horizon_mask
     }
 
     return inp_feed_val, loss_feed_val

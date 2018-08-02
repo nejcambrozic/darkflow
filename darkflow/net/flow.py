@@ -50,6 +50,8 @@ def train(self):
         feed_dict[self.inp] = x_batch
         feed_dict.update(self.feed)
 
+        #import ipdb; ipdb.set_trace()
+
         fetches = [self.train_op, loss_op, self.summary_op]
         fetched = self.sess.run(fetches, feed_dict)
         loss = fetched[1]
