@@ -25,13 +25,14 @@ def _batch(self, chunk):
     img = self.preprocess(path, allobj)
 
     # Horizon Hack for MODD
-    for obj in allobj:
-        if obj[0] == 'parking meter':  # mocked horizon
-            obj[1] = 1
-            obj[2] = 1
-            obj[3] = 1
-            obj[4] = 1
+    #for obj in allobj:
+    #    if obj[0] == 'parking meter':  # mocked horizon
+    #        obj[1] = 1
+    #        obj[2] = 1
+    #        obj[3] = 1
+    #        obj[4] = 1
 
+    #import ipdb; ipdb.set_trace()
     # Calculate regression target
     cellx = 1. * w / W
     celly = 1. * h / H
