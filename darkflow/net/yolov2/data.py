@@ -75,14 +75,12 @@ def _batch(self, chunk):
         prear[obj[5], 2] = obj[1] + obj[3] ** 2 * .5 * W  # xright
         prear[obj[5], 3] = obj[2] + obj[4] ** 2 * .5 * H  # ybot
         # determine if below horizon
-        ymax = obj[2]
-        #import ipdb;
-        #ipdb.set_trace()
 
-        if obj[4] > ymax:
-            ymax = obj[4]
-        if ymax > horizon[2] or ymax > horizon[4]:
-            confs[obj[5], :] = [1.] * B
+        #ymax = obj[2]
+        #if obj[4] > ymax:
+        #    ymax = obj[4]
+        #if ymax > horizon[2] or ymax > horizon[4]:
+        confs[obj[5], :] = [1.] * B
 
     # Finalise the placeholders' values
     upleft = np.expand_dims(prear[:, 0:2], 1)
